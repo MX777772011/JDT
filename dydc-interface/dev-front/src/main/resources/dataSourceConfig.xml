@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"  
+    xmlns:tx="http://www.springframework.org/schema/tx" 
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	
+	
+	
+	<bean id="mySqlDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">	
+         <property name="driverClassName"><value>${jdbc.driver.class}</value></property> 
+         <property name="url"><value>${jdbc.url}</value></property> 
+         <property name="username"><value>${jdbc.username}</value></property> 
+         <property name="password"><value>${jdbc.password}</value></property>
+	</bean>
+	
+	<!-- ***************事务配置************** -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="mySqlDataSource" />
+	</bean>
+	<!-- 定义AOP配置 -->
+	<aop:config>  
+		<!-- 将advice和pointcut结合 -->
+        <aop:advisor pointcut="execution(* com.*.service.*.*(..))" advice-ref="txAdvice" />  
+    </aop:config>  
+  	<!-- 定义哪些方法需要执行事务 -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">  
+        <tx:attributes>  
+              <tx:method name="get*" read-only="true" propagation="SUPPORTS"/>  
+            <tx:method name="query*" read-only="true" propagation="SUPPORTS"/>  
+            <tx:method name="find*" read-only="true" propagation="SUPPORTS"/>  
+            <tx:method name="load*" read-only="true" propagation="SUPPORTS"/>
+            <tx:method name="select*" read-only="true" propagation="SUPPORTS"/>
+            <!-- 指定目标方法采用哪种事务管理 -->
+            <tx:method name="add*" propagation="REQUIRED" rollback-for="Exception" />  
+            <tx:method name="update*" propagation="REQUIRED" rollback-for="Exception" />  
+            <tx:method name="delete*" propagation="REQUIRED" rollback-for="Exception" />  
+        </tx:attributes>  
+    </tx:advice>  
+	
+	<!-- ***************MyBatis SessionFactory ***************-->
+	
+	<!-- MyBatis Sql -->
+ 	<bean id="mySqlSessionFactory"  class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="mySqlDataSource" />
+	  	<property name="configLocation" value="classpath:mybatis-config.xml"/>
+	  	<property name="mapperLocations" value="classpath*:com/devplatform/**/mybatis/*Mapper.xml" />
+	</bean>
+	
+	<!-- 扫描mapper.java  -->                                  
+	<!-- 主动注入的方式是根据名称匹配-->
+	 <bean id="mappeScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">    
+	    <property name="basePackage" value="com.devplatform.*.mapper" />
+ 	    <property name="sqlSessionFactoryBeanName" value="mySqlSessionFactory"></property> 
+	</bean>
+	
+	</beans>
