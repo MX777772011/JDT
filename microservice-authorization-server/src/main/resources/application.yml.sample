@@ -1,0 +1,55 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: microservice-authorization-server
+  redis:
+    host: localhost
+    port: 6379
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1s
+        min-idle: 0
+        max-idle: 8
+#  data:
+#    mongodb:
+#      uri: mongodb://39.106.72.143:27018/primary
+logging:
+  level:
+    org.springframework: debug
+suntray:
+  security:
+    oauth2:
+      storeType: jwt
+      jwtSigningKey: suntray
+      clients[0]:
+        clientId: suntray
+        clientSecret: suntray
+
+#eureka配置
+eureka:
+  client:
+    healthcheck:
+      enabled: true
+    serviceUrl:
+#这个和对应eureka 一致
+      defaultZone: http://user:password123@127.0.0.1:8761/eureka
+  instance:
+    lease-renewal-interval-in-seconds: 1
+    lease-expiration-duration-in-seconds: 2
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${spring.application.instance_id:${server.port}}
+
+#调用链路跟踪，生产开true
+feign:
+  hystrix:
+    enabled: false
+
+#management:
+#  security:
+#    enabled: false
+
+
+#config-server
+#spring.cloud.config.label=master
