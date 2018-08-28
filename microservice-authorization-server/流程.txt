@@ -1,4 +1,0 @@
-一、登录
-1.客户端，输入用户名，密码
-2.调用  authorization-server  的   host:port/oauth/token
-3.得到token
