@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<!-- 任务管理器 -->
+<beans>
+	<!-- 要调用的工作类 -->
+<!-- 	<bean id="userCountJob" class="com.devplatform.business.quartz.UserCountsJob"></bean> -->
+	<!-- 定义调用对象和调用对象的方法 -->
+<!-- 	<bean id="userCountJobTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> -->
+		<!-- 调用的类 -->
+<!-- 		<property name="targetObject"> -->
+<!-- 			<ref bean="userCountJob" /> -->
+<!-- 		</property> -->
+		<!-- 调用类中的方法 -->
+<!-- 		<property name="targetMethod"> -->
+<!-- 			<value>UserCountJob</value> -->
+<!-- 		</property> -->
+<!-- 	</bean> -->
+	<!-- 定义触发时间 -->
+<!-- 	<bean id="userCountJobTaskTime" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean"> -->
+<!-- 		<property name="jobDetail"> -->
+<!-- 			<ref bean="userCountJobTask" /> -->
+<!-- 		</property> -->
+		<!-- cron表达式 -->
+<!-- 		<property name="cronExpression"> -->
+<!-- 			<value>0 0/30 * * * ?</value> -->
+<!-- 		</property> -->
+<!-- 	</bean> -->
+
+	<!-- 延迟加载 -->
+<!-- 	 <bean id="startQuertz" lazy-init="false" autowire="no" class="org.springframework.scheduling.quartz.SchedulerFactoryBean"> -->
+<!-- 		<property name="triggers"> -->
+<!-- 			<list> -->
+<!-- 				<ref bean="userCountJobTaskTime" /> -->
+<!-- 			</list> -->
+<!-- 		</property> -->
+<!-- 		<property name="startupDelay" value="20"></property> -->
+<!-- 	</bean>   -->
+	 
+</beans> 

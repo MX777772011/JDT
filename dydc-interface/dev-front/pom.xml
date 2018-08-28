@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+	license agreements. See the NOTICE file distributed with this work for additional 
+	information regarding copyright ownership. The ASF licenses this file to 
+	You under the Apache License, Version 2.0 (the "License"); you may not use 
+	this file except in compliance with the License. You may obtain a copy of 
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>dev</artifactId>
+		<groupId>com.dev</groupId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>dev-front</artifactId>
+	<packaging>war</packaging>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>com.dev</groupId>
+			<artifactId>dev-common-sys-front</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		
+		<!-- 定时Quartz -->
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>2.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz-jobs</artifactId>
+			<version>2.2.1</version>
+		</dependency>
+		
+	</dependencies>
+	<profiles>
+		<!-- 开发环境地址 -->
+		<profile>
+			<id>development</id>
+			<properties>
+				<tomcat-url>http://127.0.0.1:18180/manager/text</tomcat-url>
+				<tomcat-path>/front</tomcat-path>
+				<!-- 如果UserName 和password不打算写Pom中，可以写在maven的setting中 -->
+				<tomcat-username>admin</tomcat-username>
+				<tomcat-password>suntray123</tomcat-password>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+
+		<!-- 测试环境地址 -->
+		<profile>
+			<id>test</id>
+			<properties>
+				<tomcat-url>http://localhost:18080/manager/text</tomcat-url>
+				<tomcat-path>/front</tomcat-path>
+				<tomcat-username>admin</tomcat-username>
+				<tomcat-password>suntray123</tomcat-password>
+			</properties>
+		</profile>
+
+		<!-- 生产环境地址 -->
+		<profile>
+			<id>production</id>
+			<properties>
+				<tomcat-url>http://localhost:18180/manager/text</tomcat-url>
+				<tomcat-path>/front</tomcat-path>
+				<tomcat-username>admin</tomcat-username>
+				<tomcat-password>suntray123</tomcat-password>
+			</properties>
+		</profile>
+	</profiles>
+
+	<!--安装插件 -->
+	<build>
+		<directory>target</directory><!-- 这是打包的文件的路径。默认是该工程的根目录。 -->
+		<finalName>front</finalName>
+
+		<!-- 引入resource -->
+			<!-- filtering 表示 资源文件中的占位符是否需要被替换，true为需要替换。 -->
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/*</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/java</directory>
+				<filtering>true</filtering>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+				<includes>
+					<include>**/*</include>
+				</includes>
+			</resource>
+		</resources>
+
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.tomcat.maven</groupId>
+					<artifactId>tomcat7-maven-plugin</artifactId>
+					<version>2.2</version>
+					<configuration>
+						<url>${tomcat-url}</url>
+						<server>tomcat</server>
+						<path>${tomcat-path}</path>
+						<username>${tomcat-username}</username>
+						<password>${tomcat-password}</password>
+						<update>true</update>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+</project>
